@@ -1,0 +1,9 @@
+WARNING: ./Instruction_Memory.v:12: $readmemh: Standard inconsistency, following 1364-2005.
+WARNING: ./Instruction_Memory.v:12: $readmemh(memfile.hex): Not enough words in the file for the requested range [0:1023].
+VCD info: dumpfile single_cycle.vcd opened for output.
+Cycle 1: Instr=0262828b MAC=1 RegWrite=1 MACResult=000002d6
+Cycle 2: Instr=0262828b MAC=1 RegWrite=1 MACResult=00001f32
+Cycle 3: Instr=0262828b MAC=1 RegWrite=1 MACResult=00015726
+Cycle 4: Instr=0262828b MAC=1 RegWrite=1 MACResult=000ebea2
+Simulation finished.
+Cycle 5: Instr=00502023 MAC=0 RegWrite=0 MACResult=00000000

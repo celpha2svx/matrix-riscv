@@ -30,26 +30,41 @@ module Single_Cycle_Top_Tb ();
     end
 
     // Print results after reset
+    integer mac_count, reg_write_count, total_instructions;
+
+    initial begin
+       mac_count = 0;
+       reg_write_count = 0;
+       total_instructions = 0;
+    end
+
     always @(posedge clk) begin
       if (rst) begin
-        cycle_count = cycle_count + 1;
-        $display("Cycle %0d:", cycle_count);
-        $display("  Instruction    = %h", Single_Cycle_Top.RD_Instr);
-        $display("  RegWrite       = %b", Single_Cycle_Top.RegWrite);
-        $display("  ResultSrc      = %b", Single_Cycle_Top.ResultSrc);
-        $display("  MAC_Enable     = %b", Single_Cycle_Top.MAC_Enable);
-        $display("  ALUResult      = %h", Single_Cycle_Top.ALUResult);
-        $display("  MACResult      = %h", Single_Cycle_Top.MACResult);
-        $display("  Result (write) = %h", Single_Cycle_Top.Result);
-        $display("  RD1_Top        = %h", Single_Cycle_Top.RD1_Top);
-        $display("  RD2_Top        = %h", Single_Cycle_Top.RD2_Top) ;
-        $display("  SrcB           = %h", Single_Cycle_Top.SrcB);
-        $display("  Imm_Ext_Top    = %h", Single_Cycle_Top.Imm_Ext_Top);
-        $display("  ALUSrc         = %b", Single_Cycle_Top.ALUSrc);
-        $display("  ALUControl_Top = %b", Single_Cycle_Top.ALUControl_Top);
-        $display("  rst            = %b", rst);
-        $display("");
-        if (cycle_count > 10) $finish;
+        total_instructions = total_instructions + 1;
+        if (Single_Cycle_Top.MAC_Enable)
+            mac_count = mac_count + 1;
+        if (Single_Cycle_Top.RegWrite)
+            reg_write_count = reg_write_count + 1;
+        
+        $display("Cycle %0d: Instr=%h MAC=%b RegWrite=%b MACResult=%h",
+            total_instructions,
+            Single_Cycle_Top.RD_Instr,
+            Single_Cycle_Top.MAC_Enable,
+            Single_Cycle_Top.RegWrite,
+            Single_Cycle_Top.MACResult);
+        
+        if (total_instructions > 8) begin
+            $display("");
+            $display("=== BENCHMARK RESULTS ===");
+            $display("Total instructions: %0d", total_instructions - 1);
+            $display("MAC instructions:    %0d", mac_count);
+            $display("Register writes:     %0d", reg_write_count);
+            $display("Cycles (MACs):       %0d", mac_count);
+            $display("Cycles (no-MAC est): %0d", mac_count * 2);
+            $display("Instruction reduction: %0d%%", ((mac_count*2 - mac_count)*100)/(mac_count*2));
+            $display("=========================");
+            $finish;
+        end
       end
     end  
 

@@ -17,6 +17,7 @@ module Single_Cycle_Top(clk,rst,debug_RD1,debug_RD2,debug_Reg5);
 
     wire [31:0] PC_Top,RD_Instr,RD1_Top,Imm_Ext_Top,ALUResult,ReadData,PCPlus4,RD2_Top,SrcB,Result;
     wire [31:0] MACResult;
+    wire [31:0] RD4_Top;
     wire RegWrite,MemWrite,ALUSrc,MAC_Enable;
     wire [1:0]ImmSrc;
     wire [2:0]ALUControl_Top;
@@ -49,8 +50,10 @@ module Single_Cycle_Top(clk,rst,debug_RD1,debug_RD2,debug_Reg5);
         .A1(RD_Instr[19:15]),
         .A2(RD_Instr[24:20]),
         .A3(RD_Instr[11:7]),
+        .A4(RD_Instr[11:7]),  
         .RD1(RD1_Top),
-        .RD2(RD2_Top)
+        .RD2(RD2_Top),
+        .RD4(RD4_Top)
     );
 
     Sign_Extend Sign_Extend(
@@ -81,7 +84,7 @@ module Single_Cycle_Top(clk,rst,debug_RD1,debug_RD2,debug_Reg5);
     MatrixALU MatrixALU(
         .inA(RD1_Top),
         .inB(RD2_Top),
-        .acc_in(32'd0),
+        .acc_in(RD4_Top),
         .enable(MAC_Enable),
         .result(MACResult),
         .negative(),

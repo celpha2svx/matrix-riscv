@@ -1,0 +1,69 @@
+WARNING: ./Instruction_Memory.v:12: $readmemh: Standard inconsistency, following 1364-2005.
+WARNING: ./Instruction_Memory.v:12: $readmemh(memfile.hex): Not enough words in the file for the requested range [0:1023].
+VCD info: dumpfile single_cycle.vcd opened for output.
+Cycle 1:
+  Instruction    = 0262828b
+  RegWrite       = 1
+  ResultSrc      = 10
+  MAC_Enable     = 1
+  ALUResult      = 0000004c
+  MACResult      = 000002d6
+  Result (write) = 000002d6
+  RD1_Top        = 00000042
+  RD2_Top        = 0000000a
+  SrcB           = 0000000a
+  Imm_Ext_Top    = 00000026
+  ALUSrc         = 0
+  ALUControl_Top = 000
+  rst            = 1
+
+Cycle 2:
+  Instruction    = 0262828b
+  RegWrite       = 1
+  ResultSrc      = 10
+  MAC_Enable     = 1
+  ALUResult      = 000002e0
+  MACResult      = 00001f32
+  Result (write) = 00001f32
+  RD1_Top        = 000002d6
+  RD2_Top        = 0000000a
+  SrcB           = 0000000a
+  Imm_Ext_Top    = 00000026
+  ALUSrc         = 0
+  ALUControl_Top = 000
+  rst            = 1
+
+Cycle 3:
+  Instruction    = 00502023
+  RegWrite       = 0
+  ResultSrc      = 00
+  MAC_Enable     = 0
+  ALUResult      = 00000000
+  MACResult      = 00000000
+  Result (write) = 00000000
+  RD1_Top        = 00000000
+  RD2_Top        = 000002d6
+  SrcB           = 00000000
+  Imm_Ext_Top    = 00000000
+  ALUSrc         = 1
+  ALUControl_Top = 000
+  rst            = 1
+
+Cycle 4:
+  Instruction    = 0000006f
+  RegWrite       = 0
+  ResultSrc      = 00
+  MAC_Enable     = 0
+  ALUResult      = 00000000
+  MACResult      = 00000000
+  Result (write) = 00000000
+  RD1_Top        = 00000000
+  RD2_Top        = 00000000
+  SrcB           = 00000000
+  Imm_Ext_Top    = 00000000
+  ALUSrc         = 0
+  ALUControl_Top = 000
+  rst            = 1
+
+Simulation finished.
+Cycle 5:
