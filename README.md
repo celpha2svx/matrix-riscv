@@ -36,6 +36,8 @@ mac  a2, a0, a1    # a2 = a2 + (a0 * a1) — ONE instruction, ONE cycle
 
 A single custom instruction that does the full multiply-accumulate in **one cycle**. Half the instructions. Half the memory traffic. Same result.
 
+![Comparison Diagram](images/comparison.png)
+
 ---
 
 ## 📐 Instruction Encoding
@@ -53,7 +55,13 @@ A single custom instruction that does the full multiply-accumulate in **one cycl
 
 ---
 
-## ⚙️ Hardware Changes
+## ⚙️ Hardware Architecture
+
+The datapath below shows how `MatrixALU` plugs into the writeback stage. The Register File gains a third read port (`rd / h4`) so the old accumulator value is available every cycle. A 3-input MUX selects between ALU, Data Memory, and MAC result via a 2-bit `ResultSrc`.
+
+![Datapath Diagram](images/datapath.png)
+
+### Modified Modules
 
 | Module | Modification |
 |---|---|
@@ -70,16 +78,23 @@ A single custom instruction that does the full multiply-accumulate in **one cycl
 
 ### Simulation Output — 4 Consecutive MACs
 
+Real terminal output from running the testbench:
+
+![MAC Cycles Terminal Output](images/MAC-Cycles.jpg)
+
 ```
-Cycle 1: MAC_Enable=1, ResultSrc=10, MACResult=000002d6  →  726
-Cycle 2: MAC_Enable=1, ResultSrc=10, MACResult=00001f32  →  7,986
-Cycle 3: MAC_Enable=1, ResultSrc=10, MACResult=00015726  →  87,846
-Cycle 4: MAC_Enable=1, ResultSrc=10, MACResult=000ebea2  →  966,306
+Cycle 1: Instr=0262828b MAC=1 RegWrite=1 MACResult=000002d6  →  726
+Cycle 2: Instr=0262828b MAC=1 RegWrite=1 MACResult=00001f32  →  7,986
+Cycle 3: Instr=0262828b MAC=1 RegWrite=1 MACResult=00015726  →  87,846
+Cycle 4: Instr=0262828b MAC=1 RegWrite=1 MACResult=000ebea2  →  966,306
+Simulation finished.
 ```
 
 4 MACs. 4 instructions. 4 cycles. Verified.
 
 ### Performance vs Standard RV32I
+
+![Benchmark Results](images/benchmark.png)
 
 | Metric | Standard (`mul` + `add`) | Matrix-RISCV (`mac`) | Reduction |
 |---|---|---|---|
@@ -110,10 +125,11 @@ iverilog -o simv Single_Cycle_Top.v Single_Cycle_Top_Tb.v
 **Expected Output**
 
 ```
-Cycle 1: MAC_Enable=1, ResultSrc=10, MACResult=000002d6
-Cycle 2: MAC_Enable=1, ResultSrc=10, MACResult=00001f32
-Cycle 3: MAC_Enable=1, ResultSrc=10, MACResult=00015726
-Cycle 4: MAC_Enable=1, ResultSrc=10, MACResult=000ebea2
+Cycle 1: Instr=0262828b MAC=1 RegWrite=1 MACResult=000002d6
+Cycle 2: Instr=0262828b MAC=1 RegWrite=1 MACResult=00001f32
+Cycle 3: Instr=0262828b MAC=1 RegWrite=1 MACResult=00015726
+Cycle 4: Instr=0262828b MAC=1 RegWrite=1 MACResult=000ebea2
+Simulation finished.
 ```
 
 ---
