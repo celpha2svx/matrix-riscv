@@ -1,0 +1,71 @@
+=== MAC VERSION ===
+WARNING: ./Instruction_Memory.v:12: $readmemh: The behaviour for reg[...] mem[N:0]; $readmemh("...", mem); changed in the 1364-2005 standard. To avoid ambiguity, use mem[0:N] or explicit range parameters $readmemh("...", mem, start, stop);. Defaulting to 1364-2005 behavior.
+WARNING: ./Instruction_Memory.v:12: $readmemh(memfile.hex): Not enough words in the file for the requested range [0:1023].
+Cycle 1: Instr=0262828b MAC=1 RegWrite=1 MACResult=00000042
+Cycle 2: Instr=0262828b MAC=1 RegWrite=1 MACResult=000002d6
+Cycle 3: Instr=0262828b MAC=1 RegWrite=1 MACResult=00001f32
+Cycle 4: Instr=0262828b MAC=1 RegWrite=1 MACResult=00015726
+Cycle 5: Instr=0262828b MAC=1 RegWrite=1 MACResult=000ebea2
+Cycle 6: Instr=0262828b MAC=1 RegWrite=1 MACResult=00a230f6
+Cycle 7: Instr=0262828b MAC=1 RegWrite=1 MACResult=06f81a92
+Cycle 8: Instr=0262828b MAC=1 RegWrite=1 MACResult=4ca92446
+Cycle 9: Instr=0262828b MAC=1 RegWrite=1 MACResult=4b448f02
+Cycle 10: Instr=0262828b MAC=1 RegWrite=1 MACResult=3bf22516
+Cycle 11: Instr=0262828b MAC=1 RegWrite=1 MACResult=936797f2
+Cycle 12: Instr=0262828b MAC=1 RegWrite=1 MACResult=55738766
+Cycle 13: Instr=0262828b MAC=1 RegWrite=1 MACResult=abf6d162
+Cycle 14: Instr=0262828b MAC=1 RegWrite=1 MACResult=639aff36
+Cycle 15: Instr=0262828b MAC=1 RegWrite=1 MACResult=47a8f752
+Cycle 16: Instr=0262828b MAC=1 RegWrite=1 MACResult=1442a086
+Cycle 17: Instr=00502023 MAC=0 RegWrite=0 MACResult=00000000
+========================================
+========================================
+Total instructions executed : 17
+MAC instructions            : 16
+Register writes             : 16
+Instruction memory traffic  : 68 bytes
+========================================
+
+=== STANDARD VERSION ===
+WARNING: ./Instruction_Memory.v:12: $readmemh: The behaviour for reg[...] mem[N:0]; $readmemh("...", mem); changed in the 1364-2005 standard. To avoid ambiguity, use mem[0:N] or explicit range parameters $readmemh("...", mem, start, stop);. Defaulting to 1364-2005 behavior.
+WARNING: ./Instruction_Memory.v:12: $readmemh(memfile.hex): Not enough words in the file for the requested range [0:1023].
+Cycle 1: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000000
+Cycle 2: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 3: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 4: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 5: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 6: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 7: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 8: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 9: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 10: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 11: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 12: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 13: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 14: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 15: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 16: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 17: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 18: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 19: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 20: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 21: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 22: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 23: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 24: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 25: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 26: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 27: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 28: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 29: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 30: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 31: Instr=02628233 MAC=0 RegWrite=1 MACResult=00000010
+Cycle 32: Instr=00728133 MAC=0 RegWrite=1 MACResult=00000006
+Cycle 33: Instr=00502023 MAC=0 RegWrite=0 MACResult=00000000
+========================================
+========================================
+Total instructions executed : 33
+MAC instructions            : 0
+Register writes             : 32
+Instruction memory traffic  : 132 bytes
+========================================
