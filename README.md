@@ -24,7 +24,7 @@ mul  t0, a0, a1    # Multiply   → 1 instruction, 1 cycle, 1 register write
 add  a2, a2, t0    # Accumulate → 1 instruction, 1 cycle, 1 register write
 ```
 
-That's **2 cycles, 2 register writes, 8 bytes of instruction memory** per MAC. On a 4GB RAM machine, your instruction stream competes directly with your training data for memory bandwidth. At 1 million MACs, you're burning **8MB just on instruction fetches** — before a single weight is touched.
+That's **2 cycles, 2 register writes, 8 bytes of instruction memory** per MAC. On a 4 GB RAM machine, your instruction stream competes directly with your training data for memory bandwidth. At 1 million MACs, you're burning **8 MB just on instruction fetches** — before a single weight is touched.
 
 ---
 
@@ -76,9 +76,30 @@ The datapath below shows how `MatrixALU` plugs into the writeback stage. The Reg
 
 ## 📊 Results
 
-### Simulation Output — 4 Consecutive MACs
+### Simulation Waveform — 16-MAC Benchmark
 
-Real terminal output from running the testbench:
+The waveform below shows all control signals across 16 consecutive MAC cycles. `MAC_Enable` and `RegWrite` stay high for every MAC instruction and drop exactly at the store — confirming the decoder and datapath are working correctly with no stray cycles.
+
+![Simulation Waveform](waveform.png)
+
+### 4×4 Matrix MAC Benchmark — Real Simulation Numbers
+
+Both versions were compiled and simulated on the same processor using Icarus Verilog. The standard version uses `mul`+`add` pairs. The MAC version uses the custom `mac` instruction. Results captured directly from simulation output:
+
+![Benchmark Chart](benchmark_chart.png)
+
+| Metric | Standard (`mul`+`add`) | Matrix-RISCV (`mac`) | Reduction |
+|---|---|---|---|
+| Total instructions | 33 | 17 | **~48.5%** |
+| Register writes | 32 | 16 | **50%** |
+| Instruction memory traffic | 132 bytes | 68 bytes | **~48.5%** |
+| MAC instructions | 0 | 16 | — |
+
+> These are real numbers from simulation, not theoretical estimates. Full logs in `result_mac.txt` and `result_standard.txt`.
+
+### Original 4-MAC Functional Verification
+
+Real terminal output confirming correct chained accumulation:
 
 ![MAC Cycles Terminal Output](images/MAC-Cycles.jpg)
 
@@ -89,22 +110,6 @@ Cycle 3: Instr=0262828b MAC=1 RegWrite=1 MACResult=00015726  →  87,846
 Cycle 4: Instr=0262828b MAC=1 RegWrite=1 MACResult=000ebea2  →  966,306
 Simulation finished.
 ```
-
-4 MACs. 4 instructions. 4 cycles. Verified.
-
-### Performance vs Standard RV32I
-
-![Benchmark Results](images/benchmark.png)
-
-| Metric | Standard (`mul` + `add`) | Matrix-RISCV (`mac`) | Reduction |
-|---|---|---|---|
-| Instructions per MAC | 2 | 1 | **50%** |
-| Cycles per MAC | 2 | 1 | **50%** |
-| Register writes per MAC | 2 | 1 | **50%** |
-| Code size per MAC | 8 bytes | 4 bytes | **50%** |
-| Instruction memory traffic / 1M MACs | 8 MB | 4 MB | **50%** |
-
-> At 1 million MACs — a modest ML kernel — Matrix-RISCV frees **4MB of memory bandwidth** back to your training data. Every instruction not fetched is bandwidth returned to your model.
 
 ---
 
@@ -122,14 +127,32 @@ iverilog -o simv Single_Cycle_Top.v Single_Cycle_Top_Tb.v
 ./simv
 ```
 
-**Expected Output**
+**Run the 4×4 Benchmark**
+
+```bash
+# MAC version
+cp matmul_mac.hex memfile.hex
+iverilog -o bench_mac Single_Cycle_Top.v Benchmark_Tb.v && ./bench_mac
+
+# Standard version
+cp matmul_standard.hex memfile.hex
+iverilog -o bench_std Single_Cycle_Top.v Benchmark_Tb.v && ./bench_std
+```
+
+**Expected Output (MAC version)**
 
 ```
-Cycle 1: Instr=0262828b MAC=1 RegWrite=1 MACResult=000002d6
-Cycle 2: Instr=0262828b MAC=1 RegWrite=1 MACResult=00001f32
-Cycle 3: Instr=0262828b MAC=1 RegWrite=1 MACResult=00015726
-Cycle 4: Instr=0262828b MAC=1 RegWrite=1 MACResult=000ebea2
-Simulation finished.
+Cycle 1: Instr=0262828b MAC=1 RegWrite=1 MACResult=00000042
+...
+Cycle 16: Instr=0262828b MAC=1 RegWrite=1 MACResult=1442a086
+========================================
+         BENCHMARK RESULTS
+========================================
+Total instructions executed : 17
+MAC instructions            : 16
+Register writes             : 16
+Instruction memory traffic  : 68 bytes
+========================================
 ```
 
 ---
@@ -144,8 +167,17 @@ Simulation finished.
 | `Main_Decoder.v` | Control decoder with custom-0 opcode support |
 | `Control_Unit_Top.v` | Top-level control unit routing `MAC_Enable` |
 | `Single_Cycle_Top.v` | Full processor with MAC datapath integrated |
-| `Single_Cycle_Top_Tb.v` | Testbench with benchmark counters |
-| `mac_bench.hex` | Test program: 4 MACs + store |
+| `Single_Cycle_Top_Tb.v` | Original testbench (4-MAC verification) |
+| `Benchmark_Tb.v` | Extended testbench for 4×4 benchmark with counters |
+| `mac_bench.hex` | Original test program: 4 MACs + store |
+| `matmul_mac.hex` | 4×4 benchmark: 16 MAC instructions |
+| `matmul_standard.hex` | 4×4 benchmark: 32 standard mul+add instructions |
+| `result_mac.txt` | Full simulation log — MAC version |
+| `result_standard.txt` | Full simulation log — standard version |
+| `benchmark_chart.png` | Bar chart comparing both approaches |
+| `waveform.png` | Signal waveform across 16-MAC benchmark |
+| `plot_benchmark.py` | Python script that generated the benchmark chart |
+| `plot_waveform.py` | Python script that generated the waveform figure |
 
 ---
 
