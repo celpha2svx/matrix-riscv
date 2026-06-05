@@ -40,6 +40,23 @@ A single custom instruction that does the full multiply-accumulate in **one cycl
 
 ---
 
+## 🌍 Why This Matters Beyond the Numbers
+
+Most researchers building AI on constrained hardware — students, independent
+researchers, developers in low-resource environments — don't have the luxury
+of throwing more RAM at the problem.
+
+This project asks a different question: what if the instruction set itself
+was part of the solution?
+
+A 50% reduction in instruction fetch overhead is not just a benchmark number.
+On a 4GB RAM machine running a real ML workload, it means the difference
+between training completing and training stalling. This is hardware designed
+for the constraints that actually exist — not the constraints that are
+convenient to assume away.
+
+---
+
 ## 📐 Instruction Encoding
 
 ```
